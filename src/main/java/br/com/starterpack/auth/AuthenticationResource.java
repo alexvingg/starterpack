@@ -1,5 +1,6 @@
 package br.com.starterpack.auth;
 
+
 import br.com.starterpack.service.CustomUserDetailsService;
 import br.com.starterpack.util.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -23,10 +23,7 @@ public class UserServiceTest {
 
     @BeforeAll
     public static void createUser(){
-        user = new User();
-        user.setUsername("Alex");
-        user.setEmail("alexvingg@gmail.com");
-        user.setPassword("123456");
+        user = new User("alex", "alexvingg@gmail.com", "123456", null);
     }
 
     @Test
