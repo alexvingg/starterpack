@@ -21,6 +21,7 @@ public interface IServiceGetAll<T extends AbstractModel, S> extends IService<IRe
     default Page getAll(int page, int size, String order) {
         beforeGetAll();
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(order));
+
         Page all = this.getRepository().findAll(pageRequest);
         afterGetAll(all.getContent());
         return all;

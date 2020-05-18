@@ -24,7 +24,7 @@ public class UserServiceTest {
     @BeforeAll
     public static void createUser(){
         user = new User();
-        user.setName("Alex");
+        user.setUsername("Alex");
         user.setEmail("alexvingg@gmail.com");
         user.setPassword("123456");
     }
@@ -32,14 +32,14 @@ public class UserServiceTest {
     @Test
     void testSave() {
         User user = this.userService.save(this.user);
-        assertEquals(user.getName(), this.user.getName());
+        assertEquals(user.getUsername(), this.user.getUsername());
         assertNotNull(this.user.getId());
     }
 
     @Test
     void testDelete() {
         User user = this.userService.delete(this.user);
-        assertEquals(user.getName(), this.user.getName());
+        assertEquals(user.getUsername(), this.user.getUsername());
     }
 
     @Test
@@ -56,10 +56,10 @@ public class UserServiceTest {
         String id = user.getId();
         User userShow = this.userService.get(id);
 
-        userShow.setName("Alex Update");
+        userShow.setUsername("Alex Update");
 
         var userUpdateNew = this.userService.update(userShow.getId(), userShow);
 
-        assertEquals(userShow.getName(), userUpdateNew.getName());
+        assertEquals(userShow.getUsername(), userUpdateNew.getUsername());
     }
 }

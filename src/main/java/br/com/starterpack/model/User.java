@@ -1,31 +1,28 @@
 package br.com.starterpack.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
+import java.util.List;
+
 @Document("user")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class User extends AbstractModel {
 
-    private String name;
+    private String username;
 
     private String email;
 
     private String password;
 
-    public static User currentUser() {
-        return (User) RequestContextHolder.getRequestAttributes().getAttribute("user", RequestAttributes.SCOPE_REQUEST);
-    }
+    private List<String> roles;
 
-    public static void setCurrentUser(final User user) {
-        RequestContextHolder.getRequestAttributes().setAttribute("user", user, RequestAttributes.SCOPE_REQUEST);
-    }
-
-    public static void deleteCurrentUser() {
-        RequestContextHolder.getRequestAttributes().removeAttribute("user", RequestAttributes.SCOPE_REQUEST);
-    }
 }

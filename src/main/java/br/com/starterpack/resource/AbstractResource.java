@@ -5,6 +5,7 @@ import br.com.starterpack.service.IServiceAbstract;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 
@@ -12,6 +13,7 @@ import org.springframework.web.context.request.async.DeferredResult;
 public abstract class AbstractResource<T extends AbstractModel, I extends IServiceAbstract<T, S>, S> implements IResource<I> {
 
     @RequestMapping(method = RequestMethod.GET)
+    //@PreAuthorize("hasRole('ADMIN')")
     public DeferredResult<ResponseEntity<?>> getAll(@RequestParam(value = "page",
             required = false,
             defaultValue = "0") int page, @RequestParam(
@@ -61,7 +63,7 @@ public abstract class AbstractResource<T extends AbstractModel, I extends IServi
 
         log.info("edit id {} obj {}, {}", id, object, this.getClass().getCanonicalName());
 
-        object = (T) this.getService().update(id, object);
+        object = this.getService().update(id, object);
 
         dr.setResult(ResponseEntity.ok(object));
         return dr;
