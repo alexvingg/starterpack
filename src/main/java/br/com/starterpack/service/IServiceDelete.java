@@ -1,9 +1,9 @@
 package br.com.starterpack.service;
 
 import br.com.starterpack.model.AbstractModel;
-import br.com.starterpack.repository.RepositoryInterface;
+import br.com.starterpack.repository.IRepository;
 
-public interface IServiceDelete<T extends AbstractModel> extends IService<RepositoryInterface> {
+public interface IServiceDelete<T extends AbstractModel, S> extends IService<IRepository<T, S>> {
 
     default void beforeDelete(T object) {
     }

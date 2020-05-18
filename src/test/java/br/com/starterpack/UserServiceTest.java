@@ -1,7 +1,5 @@
 package br.com.starterpack;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import br.com.starterpack.model.User;
 import br.com.starterpack.service.UserService;
 import org.junit.jupiter.api.BeforeAll;
@@ -11,7 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.Optional;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
@@ -47,22 +46,20 @@ public class UserServiceTest {
     void testShow() {
         User user = this.userService.save(this.user);
         String id = user.getId();
-        Optional<User> userShow = this.userService.show(id);
-        assertEquals(userShow.get().getId(), id);
+        User userShow = this.userService.get(id);
+        assertEquals(userShow.getId(), id);
     }
 
     @Test
     void testUpdate() {
         User user = this.userService.save(this.user);
         String id = user.getId();
-        Optional<User> userShow = this.userService.show(id);
+        User userShow = this.userService.get(id);
 
-        var userUpdate = userShow.get();
+        userShow.setName("Alex Update");
 
-        userUpdate.setName("Alex Update");
+        var userUpdateNew = this.userService.update(userShow.getId(), userShow);
 
-        var userUpdateNew = this.userService.update(userUpdate.getId(), userUpdate);
-
-        assertEquals(userUpdate.getName(), userUpdateNew.getName());
+        assertEquals(userShow.getName(), userUpdateNew.getName());
     }
 }

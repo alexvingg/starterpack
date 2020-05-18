@@ -3,26 +3,29 @@ package br.com.starterpack.resource;
 import br.com.starterpack.model.AbstractModel;
 import br.com.starterpack.service.IServiceAbstract;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 
-import java.util.List;
-import java.util.Optional;
-
 @Slf4j
-public abstract class AbstractResource<T extends AbstractModel, I extends IServiceAbstract, S> implements IResource<I> {
+public abstract class AbstractResource<T extends AbstractModel, I extends IServiceAbstract<T, S>, S> implements IResource<I> {
 
     @RequestMapping(method = RequestMethod.GET)
-    public DeferredResult<ResponseEntity<?>> getAll() {
+    public DeferredResult<ResponseEntity<?>> getAll(@RequestParam(value = "page",
+            required = false,
+            defaultValue = "0") int page, @RequestParam(
+            value = "size",
+            required = false,
+            defaultValue = "10") int size,@RequestParam(
+            value = "sort",
+            required = false,
+            defaultValue = "asc") String sort) {
         final DeferredResult<ResponseEntity<?>> dr = new DeferredResult<>();
 
         log.info("getAll {}", this.getClass().getCanonicalName());
 
-        List<T> all = this.getService().index();
+        Page<T> all = this.getService().getAll(page, size, sort);
 
         dr.setResult(ResponseEntity.ok(all));
         return dr;
@@ -34,9 +37,9 @@ public abstract class AbstractResource<T extends AbstractModel, I extends IServi
 
         log.info("get by id {} , {}", id, this.getClass().getCanonicalName());
 
-        Optional object = this.getService().show(id);
+        T object = this.getService().get(id);
 
-        dr.setResult(ResponseEntity.ok(object.orElseThrow()));
+        dr.setResult(ResponseEntity.ok(object));
         return dr;
     }
 
@@ -46,13 +49,13 @@ public abstract class AbstractResource<T extends AbstractModel, I extends IServi
 
         log.info("save {}, {}", object, this.getClass().getCanonicalName());
 
-        object = (T) this.getService().save(object);
+        object = this.getService().save(object);
 
         dr.setResult(ResponseEntity.ok(object));
         return dr;
     }
 
-    @RequestMapping(value = "/{id}",method = RequestMethod.PUT)
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public DeferredResult<ResponseEntity<?>> edit(@PathVariable S id, @RequestBody T object) {
         final DeferredResult<ResponseEntity<?>> dr = new DeferredResult<>();
 

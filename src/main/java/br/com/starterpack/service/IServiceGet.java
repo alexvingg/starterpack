@@ -1,24 +1,24 @@
 package br.com.starterpack.service;
 
 import br.com.starterpack.model.AbstractModel;
-import br.com.starterpack.repository.RepositoryInterface;
+import br.com.starterpack.repository.IRepository;
 
 import java.util.Optional;
 
-public interface IServiceShow<T extends AbstractModel, S> extends IService<RepositoryInterface> {
+public interface IServiceGet<T extends AbstractModel, S> extends IService<IRepository<T, S>> {
 
-    default void beforeShow(S id){
-
-    }
-
-    default void afterShow(Optional object){
+    default void beforeGet(S id){
 
     }
 
-    default Optional show(S id) {
-        beforeShow(id);
-        Optional object = this.getRepository().findById(id);
-        afterShow(object);
+    default void afterGet(T object){
+
+    }
+
+    default T get(S id) {
+        beforeGet(id);
+        T object = this.getRepository().findById(id).orElse(null);
+        afterGet(object);
         return object;
     }
 
