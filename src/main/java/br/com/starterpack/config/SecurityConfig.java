@@ -16,10 +16,17 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled=true)
+@EnableGlobalMethodSecurity(
+        securedEnabled = true,
+        jsr250Enabled = true,
+        prePostEnabled = true
+)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -49,9 +56,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         // We don't need CSRF to this and dont authenticate this particular request
-        httpSecurity.csrf().disable().authorizeRequests().antMatchers("/api/v1/authenticate").permitAll()
+        httpSecurity.csrf().disable().authorizeRequests()
+            .antMatchers("/api/v1/authenticate").permitAll()
+            .antMatchers("/api/v1/users/**").hasRole("ADMIN")
             // all other requests need to be authenticated
             .anyRequest().authenticated().and()
+            .cors().configurationSource(request -> {
+                var cors = new CorsConfiguration();
+                cors.setAllowedOrigins(List.of("*"));
+                cors.setAllowedMethods(List.of("GET","POST", "PUT", "DELETE", "OPTIONS"));
+                cors.setAllowedHeaders(List.of("*"));
+                return cors;
+                }
+            ).and()
             // make sure we use stateless session; session won't be used to
             // store user's state.
             .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()

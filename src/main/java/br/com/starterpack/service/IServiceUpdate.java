@@ -5,18 +5,18 @@ import br.com.starterpack.repository.IRepository;
 
 public interface IServiceUpdate<T extends AbstractModel, S> extends IService<IRepository<T, S>> {
 
-    default void beforeUpdate(S id, T object){
-
+    default T beforeUpdate(S id, T object){
+        return object;
     }
 
-    default void afterUpdate(S id, T object){
-
+    default T afterUpdate(S id, T object){
+        return object;
     }
 
     default T update(S id, T object) {
-        this.beforeUpdate(id ,object);
+        object = this.beforeUpdate(id ,object);
         object = this.getRepository().save(object);
-        this.afterUpdate(id, object);
+        object = this.afterUpdate(id, object);
         return object;
     }
 
