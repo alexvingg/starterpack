@@ -35,8 +35,12 @@ public class UserServiceTest {
 
     @Test
     void testDelete() {
-        User user = this.userService.delete(this.user);
-        assertEquals(user.getUsername(), this.user.getUsername());
+
+        String id = this.user.getId();
+        this.userService.delete(id);
+
+        User delete = this.userService.get(id);
+        assertEquals(delete, null);
     }
 
     @Test

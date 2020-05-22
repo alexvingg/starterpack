@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Arrays;
 
+
 public class SeedApplication implements CommandLineRunner {
     @Autowired
     private UserRepository repository;

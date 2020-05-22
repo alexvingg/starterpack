@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/v1/user")
-public class UserResource extends AbstractResource<User, UserService, String> {
+@RequestMapping(value = "/api/v1/user")
+public class UserResource implements ICrudResource<User, UserService, String> {
 
     @Autowired
     private UserService userService;

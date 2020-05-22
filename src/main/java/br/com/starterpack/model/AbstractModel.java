@@ -14,8 +14,8 @@ public class AbstractModel {
     private String id;
 
     @CreatedDate
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
-    private LocalDateTime updatedAt= LocalDateTime.now();
+    private LocalDateTime updatedAt;
 }

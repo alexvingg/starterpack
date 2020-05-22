@@ -5,17 +5,16 @@ import br.com.starterpack.repository.IRepository;
 
 public interface IServiceDelete<T extends AbstractModel, S> extends IService<IRepository<T, S>> {
 
-    default void beforeDelete(T object) {
+    default void beforeDelete(S id) {
     }
 
-    default void afterDelete(T object){
+    default void afterDelete(S id){
     }
 
-    default T delete(T object) {
-        this.beforeDelete(object);
-        this.getRepository().delete(object);
-        this.afterDelete(object);
-        return object;
+    default void delete(S id) {
+        this.beforeDelete(id);
+        this.getRepository().deleteById(id);
+        this.afterDelete(id);
     }
 
 }
