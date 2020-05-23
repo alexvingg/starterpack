@@ -5,7 +5,6 @@ import br.com.starterpack.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Arrays;
@@ -23,9 +22,9 @@ public class SeedApplication implements CommandLineRunner {
         repository.deleteAll();
 
         // save a couple of customers
-        repository.save(new User("alex", "alexvingg@gmail.com", passwordEncoder.encode("123456"),
+        repository.save(new User("alex","alex", "alexvingg@gmail.com", passwordEncoder.encode("123456"),
                 null, null, Arrays.asList("ROLE_ADMIN")));
-        repository.save(new User("roque", "roquealmeidacosta@gmail.com", passwordEncoder.encode("123456"),
+        repository.save(new User("alex", "roque", "roquealmeidacosta@gmail.com", passwordEncoder.encode("123456"),
                 null, null, Arrays.asList("ROLE_USER")));
 
         // fetch all customers

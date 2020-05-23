@@ -23,7 +23,7 @@ public class UserServiceTest {
 
     @BeforeAll
     public static void createUser(){
-        user = new User("alex", "alexvingg@gmail.com", "123456", null, null, null);
+        user = new User("alex", "alex", "alexvingg@gmail.com", "123456", null, null, null);
     }
 
     @Test

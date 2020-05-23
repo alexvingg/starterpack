@@ -1,5 +1,6 @@
 package br.com.starterpack.service;
 
+import br.com.starterpack.exception.BusinessException;
 import br.com.starterpack.model.User;
 import br.com.starterpack.repository.IRepository;
 import br.com.starterpack.repository.UserRepository;
@@ -32,13 +33,12 @@ public class UserService implements IServiceAbstract<User, String> {
     }
 
     @Override
-    public User beforeUpdate(String id, User object) {
-        User userUpdated = this.userRepository.findById(object.getId()).orElseThrow();
+    public User mergeToUpdate(String id, User userUpdated, User object) {
 
         userUpdated.setUsername(object.getUsername());
         userUpdated.setEmail(object.getEmail());
         userUpdated.setRoles(object.getRoles());
-
+        userUpdated.setName(object.getName());
         return userUpdated;
     }
 
@@ -46,21 +46,21 @@ public class UserService implements IServiceAbstract<User, String> {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if(!user.getUsername().equals(authentication.getName())){
-            new RuntimeException();
+            new BusinessException("invalid.params");
         }
 
         User userUpdated = this.userRepository.findById(user.getId()).orElseThrow();
 
         if(user.getPassword() != null && !user.getPassword().isEmpty()){
             if(!user.getPassword().equals(user.getConfirmPassword())){
-                new RuntimeException();
+                new BusinessException("A senha informada é inválida");
             }
             userUpdated.setPassword(passwordEncoder.encode(user.getPassword()));
         }
 
-
         userUpdated.setUsername(user.getUsername());
         userUpdated.setEmail(user.getEmail());
+        userUpdated.setName(user.getName());
         userUpdated.setImage(user.getImage());
         return this.userRepository.save(userUpdated);
     }

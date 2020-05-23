@@ -1,13 +1,14 @@
 package br.com.starterpack.model;
 
-import lombok.Getter;
+import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import javax.xml.transform.Source;
 import java.time.LocalDateTime;
 
-@Getter
+@Data
 public class AbstractModel {
 
     @Id

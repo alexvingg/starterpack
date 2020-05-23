@@ -1,22 +1,27 @@
 package br.com.starterpack.service;
 
+import br.com.starterpack.exception.BusinessException;
 import br.com.starterpack.model.AbstractModel;
 import br.com.starterpack.repository.IRepository;
 
 public interface IServiceUpdate<T extends AbstractModel, S> extends IService<IRepository<T, S>> {
 
-    default T beforeUpdate(S id, T object){
-        return object;
+    default void beforeUpdate(S id, T objectUpdated, T object){
     }
 
-    default T afterUpdate(S id, T object){
-        return object;
+    default void afterUpdate(S id, T objectUpdated, T object){
+    }
+
+    default T mergeToUpdate(S id, T objectUpdated, T object) {
+        return objectUpdated;
     }
 
     default T update(S id, T object) {
-        object = this.beforeUpdate(id ,object);
-        object = this.getRepository().save(object);
-        object = this.afterUpdate(id, object);
+        T objectUpdate = this.getRepository().findById(id).orElseThrow(() -> new BusinessException("ID_NOT_EXIST"));
+        objectUpdate = this.mergeToUpdate(id, objectUpdate, object);
+        this.beforeUpdate(id, object, objectUpdate);
+        this.getRepository().save(objectUpdate);
+        this.afterUpdate(id, object, objectUpdate);
         return object;
     }
 

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.async.DeferredResult;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping(value = "/api/v1/profile")
 public class ProfileResource {
@@ -20,7 +22,7 @@ public class ProfileResource {
     private UserService userService;
 
     @RequestMapping(method = RequestMethod.PUT)
-    public DeferredResult<ResponseEntity<Response>> update(@RequestBody User user) {
+    public DeferredResult<ResponseEntity<Response>> update(@Valid @RequestBody User user) {
         final DeferredResult<ResponseEntity<Response>> dr = new DeferredResult<>();
         user = this.userService.updateProfile(user);
         dr.setResult(ResponseEntity.ok().body(Response.ok().addData("data", UserResponse.toJson(user))));
