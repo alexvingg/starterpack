@@ -5,17 +5,15 @@ import br.com.starterpack.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Arrays;
 
+//@SpringBootApplication
 public class SeedApplication implements CommandLineRunner {
     @Autowired
     private UserRepository repository;
-
-    public static void main(String[] args) {
-        SpringApplication.run(SeedApplication.class, args);
-    }
 
     public void run(String... args) throws Exception {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -23,9 +21,9 @@ public class SeedApplication implements CommandLineRunner {
 
         // save a couple of customers
         repository.save(new User("alex","alex", "alexvingg@gmail.com", passwordEncoder.encode("123456"),
-                null, null, Arrays.asList("ROLE_ADMIN")));
+                null, null, Arrays.asList("ADMIN")));
         repository.save(new User("alex", "roque", "roquealmeidacosta@gmail.com", passwordEncoder.encode("123456"),
-                null, null, Arrays.asList("ROLE_USER")));
+                null, null, Arrays.asList("USER")));
 
         // fetch all customers
         System.out.println("Users found with findAll():");

@@ -34,7 +34,6 @@ public class User extends AbstractModel {
     private String password;
 
     @Transient
-    @JsonIgnore
     private String confirmPassword;
 
     private String image;

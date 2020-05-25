@@ -1,5 +1,6 @@
 package br.com.starterpack.resource;
 
+import br.com.starterpack.enums.RequestParamEnum;
 import br.com.starterpack.model.AbstractModel;
 import br.com.starterpack.service.IServiceAbstract;
 import br.com.starterpack.util.Response;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.async.DeferredResult;
+
+import java.util.Map;
 
 public interface IResourceGetAll<T extends AbstractModel, I extends IServiceAbstract<T, S>, S> extends IResource<I> {
 
@@ -28,11 +31,16 @@ public interface IResourceGetAll<T extends AbstractModel, I extends IServiceAbst
             defaultValue = "ASC") String orderType, @RequestParam(
             value = "orderBy",
             required = false,
-            defaultValue = "") String orderBy) {
+            defaultValue = "") String orderBy, @RequestParam(
+            value = "limit",
+            required = false,
+            defaultValue = "0") int limit, @RequestParam
+            Map<String,String> allRequestParam) {
 
         final DeferredResult<ResponseEntity<Response>> dr = new DeferredResult<>();
 
-        Page<T> all = this.getService().getAll(page, perPage, orderType, orderBy);
+        allRequestParam.keySet().removeAll(RequestParamEnum.getValues());
+        Page<T> all = this.getService().getAll(page, perPage, orderType, orderBy, limit, allRequestParam);
 
         Response response = Response.ok();
         response.addData("total", all.getTotalElements());

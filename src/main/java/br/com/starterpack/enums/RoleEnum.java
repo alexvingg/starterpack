@@ -1,15 +1,17 @@
 package br.com.starterpack.enums;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.util.Arrays;
 import java.util.List;
 
 @AllArgsConstructor
+@Getter
 public enum RoleEnum {
 
-    ROLE_ADMIN("Admin", "ROLE_ADMIN"),
-    ROLE_USER("Usuário", "ROLE_USER");
+    ADMIN("Admin", "ADMIN"),
+    USER("Usuário", "USER");
 
     private String label;
     private String value;

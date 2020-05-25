@@ -17,6 +17,8 @@ public class UserResponse {
 
     private String id;
 
+    private String name;
+
     private String username;
 
     private String email;
@@ -26,8 +28,8 @@ public class UserResponse {
     private List<String> roles;
 
     public static UserResponse toJson(User user) {
-        return new UserResponse(user.getId(), user.getUsername(),
-                user.getEmail(), user.getImage() ,user.getRoles());
+        return new UserResponse(user.getId(), user.getName()
+                ,user.getUsername(), user.getEmail(), user.getImage() ,user.getRoles());
     }
 
     public static List<UserResponse> toJson(List<User> users) {

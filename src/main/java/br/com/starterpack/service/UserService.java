@@ -4,14 +4,20 @@ import br.com.starterpack.exception.BusinessException;
 import br.com.starterpack.model.User;
 import br.com.starterpack.repository.IRepository;
 import br.com.starterpack.repository.UserRepository;
-import br.com.starterpack.response.UserResponse;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.PathBuilder;
+import com.querydsl.core.types.dsl.StringPath;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -27,9 +33,18 @@ public class UserService implements IServiceAbstract<User, String> {
         return userRepository;
     }
 
+
     @Override
-    public void beforeSave(User object) {
-        object.setPassword(passwordEncoder.encode("123456"));
+    public void beforeGetAll(Map<String, String> filters, BooleanBuilder predicate, PathBuilder pathBuilder, PageRequest pageRequest) {
+
+        if(filters.containsKey("notUsers")){
+            String[] ids = filters.get("notUsers").split(",");
+            StringPath idPath = pathBuilder.getString("id");
+            BooleanExpression booleanExpression = idPath.notIn(ids);
+            predicate.and(booleanExpression);
+            filters.remove("notUsers");
+        }
+
     }
 
     @Override
@@ -45,15 +60,11 @@ public class UserService implements IServiceAbstract<User, String> {
     public User updateProfile(User user){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if(!user.getUsername().equals(authentication.getName())){
-            new BusinessException("invalid.params");
-        }
-
-        User userUpdated = this.userRepository.findById(user.getId()).orElseThrow();
+        User userUpdated = this.userRepository.findByUsername(authentication.getName());
 
         if(user.getPassword() != null && !user.getPassword().isEmpty()){
             if(!user.getPassword().equals(user.getConfirmPassword())){
-                new BusinessException("A senha informada é inválida");
+                throw new BusinessException("A senha informada é inválida");
             }
             userUpdated.setPassword(passwordEncoder.encode(user.getPassword()));
         }
