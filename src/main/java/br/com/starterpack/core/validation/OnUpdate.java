@@ -1,4 +1,4 @@
-package br.com.starterpack.validation;
+package br.com.starterpack.core.validation;
 
 import javax.validation.groups.Default;
 

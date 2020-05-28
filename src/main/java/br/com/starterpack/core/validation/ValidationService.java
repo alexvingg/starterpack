@@ -1,6 +1,6 @@
-package br.com.starterpack.validation;
+package br.com.starterpack.core.validation;
 
-import br.com.starterpack.entity.AbstractEntity;
+import br.com.starterpack.core.entity.AbstractEntity;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,9 +1,9 @@
-package br.com.starterpack.resource;
+package br.com.starterpack.core.resource;
 
-import br.com.starterpack.entity.AbstractEntity;
-import br.com.starterpack.service.ICrudService;
-import br.com.starterpack.util.Response;
-import br.com.starterpack.validation.OnUpdate;
+import br.com.starterpack.core.entity.AbstractEntity;
+import br.com.starterpack.core.service.ICrudService;
+import br.com.starterpack.core.response.Response;
+import br.com.starterpack.core.validation.OnUpdate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;

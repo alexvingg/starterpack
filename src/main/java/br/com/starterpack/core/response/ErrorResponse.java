@@ -1,4 +1,4 @@
-package br.com.starterpack.util;
+package br.com.starterpack.core.response;
 
 import lombok.Data;
 

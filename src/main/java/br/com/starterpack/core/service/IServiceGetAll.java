@@ -1,6 +1,7 @@
-package br.com.starterpack.service;
+package br.com.starterpack.core.service;
 
-import br.com.starterpack.entity.AbstractEntity;
+import br.com.starterpack.core.entity.AbstractEntity;
+import br.com.starterpack.core.response.GetAllResponse;
 import br.com.starterpack.repository.IRepository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.*;
@@ -14,7 +15,13 @@ import java.util.Map;
 
 public interface IServiceGetAll<T extends AbstractEntity, S> extends IService<IRepository<T, S>> {
 
-    default void beforeGetAll(Map<String, String> filters, BooleanBuilder predicate, PageRequest pageRequest){
+    default void beforeGetAll(Map<String, String> filters, int page,
+                              int size, String order,
+                              String orderBy, Integer limit){
+
+    }
+
+    default void applyFilters(Map<String, String> filters, BooleanBuilder predicate){
 
     }
 
@@ -22,8 +29,9 @@ public interface IServiceGetAll<T extends AbstractEntity, S> extends IService<IR
 
     }
 
-    default Page getAll(int page, int size, String order, String orderBy, Integer limit, Map<String, String> filters) {
-        page = page == 0 ? page : page  - 1;
+    default GetAllResponse getAll(int page, int size, String order, String orderBy, Integer limit, Map<String, String> filters) {
+
+        this.beforeGetAll(filters, page, size, order, orderBy, limit);
 
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(order));
 
@@ -38,7 +46,7 @@ public interface IServiceGetAll<T extends AbstractEntity, S> extends IService<IR
         PathBuilder<T> pathBuilder = new PathBuilder(AbstractEntity.class, "");
         BooleanBuilder predicate = new BooleanBuilder();
 
-        this.beforeGetAll(filters, predicate, pageRequest);
+        this.applyFilters(filters, predicate);
 
         filters.forEach((o, o2) -> {
 
@@ -60,7 +68,10 @@ public interface IServiceGetAll<T extends AbstractEntity, S> extends IService<IR
         Page all = this.getRepository().findAll(predicate, pageRequest);
 
         this.afterGetAll(all.getContent());
-        return all;
+
+        return GetAllResponse.builder()
+                .items(all.getContent())
+                .total(all.getTotalElements()).build();
     }
 
 

@@ -1,5 +1,6 @@
 package br.com.starterpack.service;
 
+import br.com.starterpack.core.service.ICrudService;
 import br.com.starterpack.entity.QTask;
 import br.com.starterpack.entity.Task;
 import br.com.starterpack.exception.BusinessException;
@@ -7,14 +8,13 @@ import br.com.starterpack.repository.IRepository;
 import br.com.starterpack.repository.TaskRepository;
 import com.querydsl.core.BooleanBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Map;
 
 @Service
-public class TaskService implements ICrudService<Task, String>{
+public class TaskService implements ICrudService<Task, String> {
 
     @Autowired
     private TaskRepository taskRepository;
@@ -25,25 +25,23 @@ public class TaskService implements ICrudService<Task, String>{
     }
 
     @Override
-    public void beforeGetAll(Map<String, String> filters, BooleanBuilder predicate, PageRequest pageRequest) {
+    public void applyFilters(Map<String, String> filters, BooleanBuilder predicate) {
 
-        if(filters.containsKey("projectId")){
-            predicate.and(QTask.task.project.id.eq(filters.get("projectId")));
-            filters.remove("projectId");
+        if(filters.containsKey("dateStart") ){
+            LocalDate start = LocalDate.parse(filters.get("dateStart"));
+            predicate.and(QTask.task.scheduledTo.goe(start));
+            filters.remove("dateStart");
         }
 
-        if(filters.containsKey("dateStart") && filters.containsKey("dateEnd")){
-            LocalDate start = LocalDate.parse(filters.get("dateStart"));
+        if(filters.containsKey("dateEnd")){
             LocalDate end = LocalDate.parse(filters.get("dateEnd"));
-            predicate.and(QTask.task.scheduledTo.between(start, end));
-            filters.remove("dateStart");
+            predicate.and(QTask.task.scheduledTo.loe(end));
             filters.remove("dateEnd");
         }
-
     }
 
     @Override
-    public Task mergeToUpdate(String id, Task objectUpdated, Task object) {
+    public Task mergeToUpdate(Task objectUpdated, Task object) {
 
         objectUpdated.setDescription(object.getDescription());
         objectUpdated.setPriority(object.getPriority());

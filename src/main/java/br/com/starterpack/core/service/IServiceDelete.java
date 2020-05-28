@@ -1,6 +1,6 @@
-package br.com.starterpack.service;
+package br.com.starterpack.core.service;
 
-import br.com.starterpack.entity.AbstractEntity;
+import br.com.starterpack.core.entity.AbstractEntity;
 import br.com.starterpack.repository.IRepository;
 
 public interface IServiceDelete<T extends AbstractEntity, S> extends IService<IRepository<T, S>> {

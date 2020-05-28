@@ -1,6 +1,7 @@
 package br.com.starterpack.resource;
 
 
+import br.com.starterpack.core.resource.ICrudResource;
 import br.com.starterpack.entity.Project;
 import br.com.starterpack.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;

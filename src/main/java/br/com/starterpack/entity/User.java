@@ -1,7 +1,8 @@
 package br.com.starterpack.entity;
 
-import br.com.starterpack.validation.OnCreate;
-import br.com.starterpack.validation.OnUpdate;
+import br.com.starterpack.core.entity.AbstractEntity;
+import br.com.starterpack.core.validation.OnCreate;
+import br.com.starterpack.core.validation.OnUpdate;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,8 +1,9 @@
 package br.com.starterpack.resource;
 
+import br.com.starterpack.core.resource.ICrudResource;
 import br.com.starterpack.entity.Task;
 import br.com.starterpack.service.TaskService;
-import br.com.starterpack.util.Response;
+import br.com.starterpack.core.response.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;

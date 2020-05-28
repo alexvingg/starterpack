@@ -1,5 +1,6 @@
 package br.com.starterpack.entity;
 
+import br.com.starterpack.core.entity.AbstractEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;

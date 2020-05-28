@@ -6,7 +6,7 @@ import br.com.starterpack.response.AuthResponse;
 import br.com.starterpack.response.UserResponse;
 import br.com.starterpack.service.CustomUserDetailsService;
 import br.com.starterpack.util.JwtTokenUtil;
-import br.com.starterpack.util.Response;
+import br.com.starterpack.core.response.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

@@ -1,6 +1,6 @@
-package br.com.starterpack.service;
+package br.com.starterpack.core.service;
 
-import br.com.starterpack.entity.AbstractEntity;
+import br.com.starterpack.core.entity.AbstractEntity;
 import br.com.starterpack.repository.IRepository;
 
 public interface IServiceSave<T extends AbstractEntity, S> extends IService<IRepository<T, S>> {
@@ -14,9 +14,9 @@ public interface IServiceSave<T extends AbstractEntity, S> extends IService<IRep
     }
 
     default T save(T object) {
-        beforeSave(object);
+        this.beforeSave(object);
         object = (T) this.getRepository().save(object);
-        afterSave(object);
+        this.afterSave(object);
         return object;
     }
 

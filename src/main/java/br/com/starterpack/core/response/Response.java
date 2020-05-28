@@ -1,4 +1,4 @@
-package br.com.starterpack.util;
+package br.com.starterpack.core.response;
 
 import java.util.HashMap;
 import java.util.Map;

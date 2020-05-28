@@ -1,5 +1,6 @@
 package br.com.starterpack.service;
 
+import br.com.starterpack.core.service.ICrudService;
 import br.com.starterpack.exception.BusinessException;
 import br.com.starterpack.entity.QUser;
 import br.com.starterpack.entity.User;
@@ -8,7 +9,6 @@ import br.com.starterpack.repository.UserRepository;
 import com.querydsl.core.BooleanBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -32,7 +32,7 @@ public class UserService implements ICrudService<User, String> {
 
 
     @Override
-    public void beforeGetAll(Map<String, String> filters, BooleanBuilder predicate, PageRequest pageRequest) {
+    public void applyFilters(Map<String, String> filters, BooleanBuilder predicate) {
         if(filters.containsKey("notUsers")){
             String[] ids = filters.get("notUsers").split(",");
             predicate.and(QUser.user.id.notIn(ids));
@@ -41,7 +41,7 @@ public class UserService implements ICrudService<User, String> {
     }
 
     @Override
-    public User mergeToUpdate(String id, User userUpdated, User object) {
+    public User mergeToUpdate(User userUpdated, User object) {
 
         userUpdated.setUsername(object.getUsername());
         userUpdated.setEmail(object.getEmail());
