@@ -1,4 +1,4 @@
-package br.com.starterpack.repository;
+package br.com.starterpack.core.repository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;

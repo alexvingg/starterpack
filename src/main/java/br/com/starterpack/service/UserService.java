@@ -4,7 +4,7 @@ import br.com.starterpack.core.service.ICrudService;
 import br.com.starterpack.exception.BusinessException;
 import br.com.starterpack.entity.QUser;
 import br.com.starterpack.entity.User;
-import br.com.starterpack.repository.IRepository;
+import br.com.starterpack.core.repository.IRepository;
 import br.com.starterpack.repository.UserRepository;
 import com.querydsl.core.BooleanBuilder;
 import lombok.extern.slf4j.Slf4j;

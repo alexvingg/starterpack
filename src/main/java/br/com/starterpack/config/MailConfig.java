@@ -1,7 +1,7 @@
 package br.com.starterpack.config;
 
-import br.com.starterpack.mail.GenericMailProcessor;
-import br.com.starterpack.mail.IMailProcessor;
+import br.com.starterpack.core.mail.GenericMailProcessor;
+import br.com.starterpack.core.mail.IMailProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

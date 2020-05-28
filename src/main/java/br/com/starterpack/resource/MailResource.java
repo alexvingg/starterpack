@@ -1,6 +1,6 @@
 package br.com.starterpack.resource;
 
-import br.com.starterpack.mail.MailRequest;
+import br.com.starterpack.core.mail.MailRequest;
 import br.com.starterpack.service.MailService;
 import br.com.starterpack.core.response.Response;
 import org.springframework.beans.factory.annotation.Autowired;

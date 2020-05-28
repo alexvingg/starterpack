@@ -4,13 +4,14 @@ import br.com.starterpack.core.service.ICrudService;
 import br.com.starterpack.entity.QTask;
 import br.com.starterpack.entity.Task;
 import br.com.starterpack.exception.BusinessException;
-import br.com.starterpack.repository.IRepository;
+import br.com.starterpack.core.repository.IRepository;
 import br.com.starterpack.repository.TaskRepository;
 import com.querydsl.core.BooleanBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -55,5 +56,9 @@ public class TaskService implements ICrudService<Task, String> {
                 () -> new  BusinessException("Task não existe"));
         taskUpdated.setDone(task.isDone());
         this.taskRepository.save(taskUpdated);
+    }
+
+    public List<Task> findByProjectId(String projectId) {
+        return this.taskRepository.findByProjectId(projectId);
     }
 }

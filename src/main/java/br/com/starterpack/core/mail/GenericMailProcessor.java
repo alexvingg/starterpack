@@ -1,4 +1,4 @@
-package br.com.starterpack.mail;
+package br.com.starterpack.core.mail;
 
 import br.com.starterpack.exception.StarterPackException;
 import lombok.NoArgsConstructor;

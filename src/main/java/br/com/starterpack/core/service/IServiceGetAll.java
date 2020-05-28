@@ -2,7 +2,7 @@ package br.com.starterpack.core.service;
 
 import br.com.starterpack.core.entity.AbstractEntity;
 import br.com.starterpack.core.response.GetAllResponse;
-import br.com.starterpack.repository.IRepository;
+import br.com.starterpack.core.repository.IRepository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.*;
 import org.apache.commons.lang3.StringUtils;

@@ -1,4 +1,4 @@
-package br.com.starterpack.mail;
+package br.com.starterpack.core.mail;
 
 import lombok.Builder;
 import lombok.Data;
