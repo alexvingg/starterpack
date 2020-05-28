@@ -14,7 +14,7 @@ public enum RoleEnum {
     USER("Usuário", "USER");
 
     private String label;
-    private String value;
+    private String val;
 
     public static List<RoleEnum> getValue(){
         return  Arrays.asList(RoleEnum.values());

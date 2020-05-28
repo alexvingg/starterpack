@@ -1,14 +1,11 @@
 package br.com.starterpack.service;
 
 import br.com.starterpack.exception.BusinessException;
+import br.com.starterpack.model.QUser;
 import br.com.starterpack.model.User;
 import br.com.starterpack.repository.IRepository;
 import br.com.starterpack.repository.UserRepository;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.PathBuilder;
-import com.querydsl.core.types.dsl.StringPath;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -35,16 +32,14 @@ public class UserService implements IServiceAbstract<User, String> {
 
 
     @Override
-    public void beforeGetAll(Map<String, String> filters, BooleanBuilder predicate, PathBuilder pathBuilder, PageRequest pageRequest) {
-
+    public void beforeGetAll(Map<String, String> filters, BooleanBuilder predicate, PageRequest pageRequest) {
         if(filters.containsKey("notUsers")){
             String[] ids = filters.get("notUsers").split(",");
-            StringPath idPath = pathBuilder.getString("id");
-            BooleanExpression booleanExpression = idPath.notIn(ids);
-            predicate.and(booleanExpression);
+            if(ids.length != 0){
+                predicate.and(QUser.user.id.notIn(ids));
+            }
             filters.remove("notUsers");
         }
-
     }
 
     @Override

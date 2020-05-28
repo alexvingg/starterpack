@@ -1,6 +1,7 @@
 package br.com.starterpack.exception;
 
 import br.com.starterpack.util.ErrorResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 
@@ -87,10 +89,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     private ResponseEntity<ErrorResponse> buildUnknownException(Exception ex, WebRequest request) {
+        log.error("buildUnknownException", ex);
         ErrorResponse error = new ErrorResponse();
-        error.setError("Sorry!! We are unable to process your request. Please try again later.");
+        error.setError("Ocorreu um erro interno");
         error.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

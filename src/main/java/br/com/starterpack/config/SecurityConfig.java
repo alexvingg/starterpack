@@ -1,11 +1,13 @@
 package br.com.starterpack.config;
 
 import br.com.starterpack.auth.JwtAuthenticationEntryPoint;
+import br.com.starterpack.enums.RoleEnum;
 import br.com.starterpack.filter.JwtRequestFilter;
 import br.com.starterpack.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Role;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -58,7 +60,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // We don't need CSRF to this and dont authenticate this particular request
         httpSecurity.cors().and().csrf().disable().authorizeRequests()
                 .antMatchers("/api/v1/authenticate").permitAll()
-                .antMatchers("/api/v1/users/**").hasRole("ADMIN")
+                .antMatchers("/api/v1/users/**").hasRole(RoleEnum.ADMIN.getVal())
+                .antMatchers("/api/v1/mails/**").hasRole(RoleEnum.ADMIN.getVal())
                 // all other requests need to be authenticated
                 .anyRequest().authenticated().and()
                 // make sure we use stateless session; session won't be used to
