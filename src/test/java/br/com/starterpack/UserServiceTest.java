@@ -1,6 +1,6 @@
 package br.com.starterpack;
 
-import br.com.starterpack.model.User;
+import br.com.starterpack.entity.User;
 import br.com.starterpack.service.UserService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

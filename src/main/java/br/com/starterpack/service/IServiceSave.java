@@ -1,9 +1,9 @@
 package br.com.starterpack.service;
 
-import br.com.starterpack.model.AbstractModel;
+import br.com.starterpack.entity.AbstractEntity;
 import br.com.starterpack.repository.IRepository;
 
-public interface IServiceSave<T extends AbstractModel, S> extends IService<IRepository<T, S>> {
+public interface IServiceSave<T extends AbstractEntity, S> extends IService<IRepository<T, S>> {
 
     default void beforeSave(T object){
 

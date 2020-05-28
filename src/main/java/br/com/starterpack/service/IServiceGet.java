@@ -1,11 +1,9 @@
 package br.com.starterpack.service;
 
-import br.com.starterpack.model.AbstractModel;
+import br.com.starterpack.entity.AbstractEntity;
 import br.com.starterpack.repository.IRepository;
 
-import java.util.Optional;
-
-public interface IServiceGet<T extends AbstractModel, S> extends IService<IRepository<T, S>> {
+public interface IServiceGet<T extends AbstractEntity, S> extends IService<IRepository<T, S>> {
 
     default void beforeGet(S id){
 

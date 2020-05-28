@@ -1,8 +1,8 @@
 package br.com.starterpack.resource;
 
 import br.com.starterpack.enums.RequestParamEnum;
-import br.com.starterpack.model.AbstractModel;
-import br.com.starterpack.service.IServiceAbstract;
+import br.com.starterpack.entity.AbstractEntity;
+import br.com.starterpack.service.ICrudService;
 import br.com.starterpack.util.Response;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.async.DeferredResult;
 
 import java.util.Map;
+import java.util.stream.Collectors;
 
-public interface IResourceGetAll<T extends AbstractModel, I extends IServiceAbstract<T, S>, S> extends IResource<I> {
+public interface IResourceGetAll<T extends AbstractEntity, I extends ICrudService<T, S>, S> extends IResource<I> {
 
     default Response preResponseGetAll(Page<T> all, Response response, int page){
         return response;
@@ -40,6 +41,9 @@ public interface IResourceGetAll<T extends AbstractModel, I extends IServiceAbst
         final DeferredResult<ResponseEntity<Response>> dr = new DeferredResult<>();
 
         allRequestParam.keySet().removeAll(RequestParamEnum.getValues());
+        allRequestParam = allRequestParam.entrySet().stream().filter(s -> !s.getValue().isEmpty())
+                .collect(Collectors.toMap(x -> x.getKey(), x -> x.getValue()));
+
         Page<T> all = this.getService().getAll(page, perPage, orderType, orderBy, limit, allRequestParam);
 
         Response response = Response.ok();

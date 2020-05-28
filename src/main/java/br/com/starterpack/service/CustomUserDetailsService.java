@@ -1,6 +1,6 @@
 package br.com.starterpack.service;
 
-import br.com.starterpack.model.User;
+import br.com.starterpack.entity.User;
 import br.com.starterpack.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;

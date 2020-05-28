@@ -1,10 +1,10 @@
 package br.com.starterpack.service;
 
 import br.com.starterpack.exception.BusinessException;
-import br.com.starterpack.model.AbstractModel;
+import br.com.starterpack.entity.AbstractEntity;
 import br.com.starterpack.repository.IRepository;
 
-public interface IServiceUpdate<T extends AbstractModel, S> extends IService<IRepository<T, S>> {
+public interface IServiceUpdate<T extends AbstractEntity, S> extends IService<IRepository<T, S>> {
 
     default void beforeUpdate(S id, T objectUpdated, T object){
     }

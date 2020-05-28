@@ -1,8 +1,8 @@
 package br.com.starterpack.service;
 
 import br.com.starterpack.exception.BusinessException;
-import br.com.starterpack.model.QUser;
-import br.com.starterpack.model.User;
+import br.com.starterpack.entity.QUser;
+import br.com.starterpack.entity.User;
 import br.com.starterpack.repository.IRepository;
 import br.com.starterpack.repository.UserRepository;
 import com.querydsl.core.BooleanBuilder;
@@ -18,7 +18,7 @@ import java.util.Map;
 
 @Service
 @Slf4j
-public class UserService implements IServiceAbstract<User, String> {
+public class UserService implements ICrudService<User, String> {
 
     @Autowired
     private UserRepository userRepository;
@@ -35,9 +35,7 @@ public class UserService implements IServiceAbstract<User, String> {
     public void beforeGetAll(Map<String, String> filters, BooleanBuilder predicate, PageRequest pageRequest) {
         if(filters.containsKey("notUsers")){
             String[] ids = filters.get("notUsers").split(",");
-            if(ids.length != 0){
-                predicate.and(QUser.user.id.notIn(ids));
-            }
+            predicate.and(QUser.user.id.notIn(ids));
             filters.remove("notUsers");
         }
     }

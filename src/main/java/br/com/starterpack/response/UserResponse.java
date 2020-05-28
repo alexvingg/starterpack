@@ -1,6 +1,6 @@
 package br.com.starterpack.response;
 
-import br.com.starterpack.model.User;
+import br.com.starterpack.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

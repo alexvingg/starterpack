@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +18,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -46,6 +49,9 @@ public class WebConfig implements WebMvcConfigurer {
         SimpleModule module = new SimpleModule();
         module.addDeserializer(LocalDateTime.class, LocalDateTimeDeserializer.INSTANCE);
         module.addSerializer(LocalDateTime.class, LocalDateTimeSerializer.INSTANCE);
+
+        module.addDeserializer(LocalDate.class, LocalDateDeserializer.INSTANCE);
+        module.addSerializer(LocalDate.class, LocalDateSerializer.INSTANCE);
         mapper.registerModule(module);
 
         return messageConverter;

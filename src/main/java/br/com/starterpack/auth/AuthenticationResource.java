@@ -1,7 +1,7 @@
 package br.com.starterpack.auth;
 
 
-import br.com.starterpack.model.User;
+import br.com.starterpack.entity.User;
 import br.com.starterpack.response.AuthResponse;
 import br.com.starterpack.response.UserResponse;
 import br.com.starterpack.service.CustomUserDetailsService;

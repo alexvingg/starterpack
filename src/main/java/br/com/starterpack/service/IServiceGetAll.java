@@ -1,11 +1,10 @@
 package br.com.starterpack.service;
 
-import br.com.starterpack.model.AbstractModel;
+import br.com.starterpack.entity.AbstractEntity;
 import br.com.starterpack.repository.IRepository;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.PathBuilder;
-import com.querydsl.core.types.dsl.StringPath;
+import com.querydsl.core.types.dsl.*;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -13,7 +12,7 @@ import org.springframework.data.domain.Sort;
 import java.util.List;
 import java.util.Map;
 
-public interface IServiceGetAll<T extends AbstractModel, S> extends IService<IRepository<T, S>> {
+public interface IServiceGetAll<T extends AbstractEntity, S> extends IService<IRepository<T, S>> {
 
     default void beforeGetAll(Map<String, String> filters, BooleanBuilder predicate, PageRequest pageRequest){
 
@@ -36,15 +35,26 @@ public interface IServiceGetAll<T extends AbstractModel, S> extends IService<IRe
             pageRequest = PageRequest.of(0, limit);
         }
 
-        PathBuilder<T> pathBuilder = new PathBuilder(AbstractModel.class, "");
+        PathBuilder<T> pathBuilder = new PathBuilder(AbstractEntity.class, "");
         BooleanBuilder predicate = new BooleanBuilder();
 
         this.beforeGetAll(filters, predicate, pageRequest);
 
         filters.forEach((o, o2) -> {
-            StringPath usernamePath = pathBuilder.getString(o);
-            BooleanExpression booleanExpression = usernamePath.containsIgnoreCase(o2);
-            predicate.and(booleanExpression);
+
+            if(o2.equals("true") || o2.equals("false")){
+                BooleanPath booleanPath = pathBuilder.getBoolean(o);
+                BooleanExpression booleanExpression = booleanPath.eq(Boolean.valueOf(o2));
+                predicate.and(booleanExpression);
+            }else if(StringUtils.isNumeric(o2)){
+                NumberPath numberPath = pathBuilder.getNumber(o, Integer.class);
+                BooleanExpression booleanExpression = numberPath.eq(Integer.valueOf(o2));
+                predicate.and(booleanExpression);
+            }else{
+                StringPath stringPath = pathBuilder.getString(o);
+                BooleanExpression booleanExpression = stringPath.eq(o2);
+                predicate.and(booleanExpression);
+            }
         });
 
         Page all = this.getRepository().findAll(predicate, pageRequest);

@@ -1,6 +1,6 @@
 package br.com.starterpack.repository;
 
-import br.com.starterpack.model.User;
+import br.com.starterpack.entity.User;
 import org.springframework.stereotype.Repository;
 
 @Repository

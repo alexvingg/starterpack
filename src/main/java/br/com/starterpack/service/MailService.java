@@ -4,7 +4,7 @@ import br.com.starterpack.exception.BusinessException;
 import br.com.starterpack.mail.IMailProcessor;
 import br.com.starterpack.mail.Mail;
 import br.com.starterpack.mail.MailRequest;
-import br.com.starterpack.model.User;
+import br.com.starterpack.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,6 @@
 package br.com.starterpack.resource;
 
-import br.com.starterpack.model.User;
+import br.com.starterpack.entity.User;
 import br.com.starterpack.response.UserResponse;
 import br.com.starterpack.service.UserService;
 import br.com.starterpack.util.Response;
