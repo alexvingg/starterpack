@@ -1,6 +1,6 @@
 package br.com.starterpack.filter;
 
-import br.com.starterpack.service.CustomUserDetailsService;
+import br.com.starterpack.service.UserService;
 import br.com.starterpack.util.JwtTokenUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +19,17 @@ import java.io.IOException;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
+
     @Autowired
-    private CustomUserDetailsService jwtUserDetailsService;
+    private UserService userService;
+
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
+
         final String authorizationHeader = request.getHeader("Authorization");
         String username = null;
         String jwtToken = null;
@@ -47,7 +51,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         // Once we get the token validate it.
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.jwtUserDetailsService.loadUserByUsername(username);
+            UserDetails userDetails = this.userService.loadUserByUsername(username);
 
             // if token is valid configure Spring Security to manually set
             // authentication
@@ -62,6 +66,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }
         }
+
         chain.doFilter(request, response);
     }
 }

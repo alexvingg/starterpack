@@ -36,7 +36,7 @@ public interface IServiceGetAll<T extends AbstractEntity, S> extends IService<IR
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(order));
 
         if(!orderBy.isEmpty()){
-            pageRequest = PageRequest.of(page, size, Sort.by(order, orderBy));
+            pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(order), orderBy));
         }
 
         if(limit != 0){
@@ -49,7 +49,6 @@ public interface IServiceGetAll<T extends AbstractEntity, S> extends IService<IR
         this.applyFilters(filters, predicate);
 
         filters.forEach((o, o2) -> {
-
             if(o2.equals("true") || o2.equals("false")){
                 BooleanPath booleanPath = pathBuilder.getBoolean(o);
                 BooleanExpression booleanExpression = booleanPath.eq(Boolean.valueOf(o2));

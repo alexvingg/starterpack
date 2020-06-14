@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.async.DeferredResult;
+
+import java.util.HashMap;
 import java.util.List;
 
 import java.util.Map;
@@ -43,6 +45,10 @@ public interface IResourceGetAll<T extends AbstractEntity, I extends ICrudServic
             Map<String,String> allRequestParam) {
 
         final DeferredResult<ResponseEntity<Response>> dr = new DeferredResult<>();
+
+        if(allRequestParam == null){
+            allRequestParam = new HashMap<>();
+        }
 
         allRequestParam.keySet().removeAll(RequestParamEnum.getValues());
         allRequestParam = allRequestParam.entrySet().stream().filter(s -> !s.getValue().isEmpty())
