@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.DecimalMin;
@@ -19,6 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Project extends AbstractEntity {
 
+    @Indexed(unique = true)
     @NotEmpty
     private String name;
 
