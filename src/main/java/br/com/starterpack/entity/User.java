@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.*;
@@ -22,9 +23,11 @@ public class User extends AbstractEntity {
     @NotBlank(groups = {OnCreate.class, OnUpdate.class})
     private String name;
 
+    @Indexed(unique = true)
     @NotBlank(groups = {OnCreate.class, OnUpdate.class})
     private String username;
 
+    @Indexed(unique = true)
     @NotBlank(groups = {OnCreate.class, OnUpdate.class})
     @Email(groups = {OnCreate.class, OnUpdate.class})
     private String email;
