@@ -1,10 +1,10 @@
 package br.com.starterpack.service;
 
-import br.com.starterpack.exception.BusinessException;
 import br.com.starterpack.core.mail.IMailProcessor;
 import br.com.starterpack.core.mail.Mail;
 import br.com.starterpack.core.mail.MailRequest;
 import br.com.starterpack.entity.User;
+import br.com.starterpack.exception.BusinessException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +17,6 @@ public class MailService {
     private IMailProcessor iMailProcessor;
 
     public void sendMail(MailRequest mailRequest) {
-
         Mail mail = Mail.builder().to(mailRequest.getUsers().stream().map(User::getEmail)
                 .collect(Collectors.toList()))
                 .body(mailRequest.getMessage())

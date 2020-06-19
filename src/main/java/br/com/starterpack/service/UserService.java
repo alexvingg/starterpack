@@ -1,7 +1,7 @@
 package br.com.starterpack.service;
 
 import br.com.starterpack.core.repository.IRepository;
-import br.com.starterpack.core.service.ICrudService;
+import br.com.starterpack.core.service.AbstractCrudService;
 import br.com.starterpack.entity.QUser;
 import br.com.starterpack.entity.User;
 import br.com.starterpack.exception.BusinessException;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class UserService implements ICrudService<User, String>, UserDetailsService {
+public class UserService extends AbstractCrudService<User, String> implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;

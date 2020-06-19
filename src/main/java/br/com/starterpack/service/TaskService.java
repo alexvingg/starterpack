@@ -1,6 +1,6 @@
 package br.com.starterpack.service;
 
-import br.com.starterpack.core.service.ICrudService;
+import br.com.starterpack.core.service.AbstractCrudService;
 import br.com.starterpack.entity.QTask;
 import br.com.starterpack.entity.Task;
 import br.com.starterpack.exception.BusinessException;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class TaskService implements ICrudService<Task, String> {
+public class TaskService extends AbstractCrudService<Task, String> {
 
     @Autowired
     private TaskRepository taskRepository;

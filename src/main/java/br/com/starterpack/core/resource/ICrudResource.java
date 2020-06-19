@@ -1,10 +1,20 @@
 package br.com.starterpack.core.resource;
 
-import br.com.starterpack.core.entity.AbstractEntity;
-import br.com.starterpack.core.service.ICrudService;
+import br.com.starterpack.core.response.Response;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.context.request.async.DeferredResult;
 
-public interface ICrudResource<T extends AbstractEntity, I extends ICrudService<T, S>, S> extends
-        IResourceGet<T,I,S>, IResourceGetAll<T,I,S>, IResourceSave<T,I,S>,
-        IResourceDelete<T, I, S>, IResourceUpdate<T,I,S> {
+import java.util.Map;
 
+public interface ICrudResource<T, S> {
+
+    DeferredResult<ResponseEntity<Response>> get(S id);
+
+    DeferredResult<ResponseEntity<Response>> get(int page, int perPage, String orderType, String orderBy,
+                                                           int limit,Map<String,String> allRequestParam);
+    DeferredResult<ResponseEntity<Response>> save(T object);
+
+    DeferredResult<ResponseEntity<Response>> update(S id, T object);
+
+    DeferredResult<ResponseEntity<Response>> delete(S id);
 }

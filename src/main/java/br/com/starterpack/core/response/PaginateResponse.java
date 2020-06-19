@@ -7,7 +7,7 @@ import java.util.List;
 
 @Builder
 @Getter
-public class GetAllResponse {
+public class PaginateResponse {
 
     private List items;
 

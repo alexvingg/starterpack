@@ -1,5 +1,6 @@
 package br.com.starterpack.resource;
 
+import br.com.starterpack.core.resource.AbstractCrudResource;
 import br.com.starterpack.core.resource.ICrudResource;
 import br.com.starterpack.entity.Task;
 import br.com.starterpack.service.TaskService;
@@ -14,7 +15,7 @@ import org.springframework.web.context.request.async.DeferredResult;
 
 @RestController
 @RequestMapping(value = "/api/v1/tasks")
-public class TaskResource implements ICrudResource<Task, TaskService, String> {
+public class TaskResource extends AbstractCrudResource<Task, TaskService, String> {
 
     @Autowired
     private TaskService taskService;

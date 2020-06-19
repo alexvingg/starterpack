@@ -1,6 +1,6 @@
 package br.com.starterpack.service;
 
-import br.com.starterpack.core.service.ICrudService;
+import br.com.starterpack.core.service.AbstractCrudService;
 import br.com.starterpack.entity.Project;
 import br.com.starterpack.core.repository.IRepository;
 import br.com.starterpack.repository.ProjectRepository;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ProjectService implements ICrudService<Project, String> {
+public class ProjectService extends AbstractCrudService<Project, String> {
 
     @Autowired
     private ProjectRepository projectRepository;

@@ -1,6 +1,6 @@
 package br.com.starterpack.service;
 
-import br.com.starterpack.core.response.GetAllResponse;
+import br.com.starterpack.core.response.PaginateResponse;
 import br.com.starterpack.entity.QUser;
 import br.com.starterpack.entity.User;
 import br.com.starterpack.enums.RoleEnum;
@@ -8,7 +8,6 @@ import br.com.starterpack.exception.BusinessException;
 import br.com.starterpack.repository.UserRepository;
 import com.querydsl.core.BooleanBuilder;
 import org.junit.Assert;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -51,7 +50,7 @@ public class UserServiceTest {
         Mockito.when(this.userRepository.findAll(predicate,
                 PageRequest.of(0, 10, Sort.by("ASC")))).thenReturn(pagedUsers);
 
-        GetAllResponse userAll = this.userService.getAll(0, 10, "ASC", "", 0,
+        PaginateResponse userAll = this.userService.get(0, 10, "ASC", "", 0,
                 new HashMap<>());
 
         Assert.assertEquals(0, userAll.getItems().size());
@@ -71,7 +70,7 @@ public class UserServiceTest {
         Map filters = new HashMap<>();
         filters.put("notUsers", "1");
 
-        GetAllResponse userAll = this.userService.getAll(0, 10, "ASC", "", 0,
+        PaginateResponse userAll = this.userService.get(0, 10, "ASC", "", 0,
                 filters);
 
         Assert.assertEquals(1, userAll.getItems().size());
@@ -111,12 +110,7 @@ public class UserServiceTest {
 
         user.setId("1");
 
-        Authentication auth = new UsernamePasswordAuthenticationToken(user,null);
-        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
-        Mockito.when(securityContext.getAuthentication()).thenReturn(auth);
-        SecurityContextHolder.setContext(securityContext);
-
-        Mockito.when(this.userRepository.findByUsername(auth.getName())).thenReturn(user);
+        authSecurity(user);
         Mockito.when(this.userRepository.save(user)).thenReturn(user);
 
         User userUpdated = this.userService.updateProfile(user);
@@ -132,12 +126,7 @@ public class UserServiceTest {
         user.setId("1");
         user.setConfirmPassword("1234567");
 
-        Authentication auth = new UsernamePasswordAuthenticationToken(user,null);
-        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
-        Mockito.when(securityContext.getAuthentication()).thenReturn(auth);
-        SecurityContextHolder.setContext(securityContext);
-
-        Mockito.when(this.userRepository.findByUsername(auth.getName())).thenReturn(user);
+        authSecurity(user);
 
         BusinessException exception = Assert.assertThrows(BusinessException.class,
                 () -> userService.updateProfile(user));
@@ -167,5 +156,14 @@ public class UserServiceTest {
                 "123456",
                 "",
                 Arrays.asList(RoleEnum.ADMIN.getVal()));
+    }
+
+    private void authSecurity(User user) {
+        Authentication auth = new UsernamePasswordAuthenticationToken(user, null);
+        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+        Mockito.when(securityContext.getAuthentication()).thenReturn(auth);
+        SecurityContextHolder.setContext(securityContext);
+
+        Mockito.when(this.userRepository.findByUsername(auth.getName())).thenReturn(user);
     }
 }
