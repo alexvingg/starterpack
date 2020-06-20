@@ -1,12 +1,9 @@
 package br.com.starterpack.service;
 
-import br.com.starterpack.core.response.PaginateResponse;
-import br.com.starterpack.entity.QUser;
 import br.com.starterpack.entity.User;
 import br.com.starterpack.enums.RoleEnum;
 import br.com.starterpack.exception.BusinessException;
 import br.com.starterpack.repository.UserRepository;
-import com.querydsl.core.BooleanBuilder;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,10 +11,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -26,8 +19,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
@@ -40,41 +31,6 @@ public class UserServiceTest {
     private UserRepository userRepository;
 
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-    @Test
-    public void retListUser(){
-
-        BooleanBuilder predicate = new BooleanBuilder();
-        Page<User> pagedUsers = new PageImpl<>(Arrays.asList());
-
-        Mockito.when(this.userRepository.findAll(predicate,
-                PageRequest.of(0, 10, Sort.by("ASC")))).thenReturn(pagedUsers);
-
-        PaginateResponse userAll = this.userService.get(0, 10, "ASC", "", 0,
-                new HashMap<>());
-
-        Assert.assertEquals(0, userAll.getItems().size());
-    }
-
-    @Test
-    public void retListUserFilter(){
-
-        User user = getUser();
-
-        BooleanBuilder predicate = new BooleanBuilder();
-        Page<User> pagedUsers = new PageImpl<>(Arrays.asList(user));
-
-        Mockito.when(this.userRepository.findAll(predicate.and(QUser.user.id.notIn("1")),
-                PageRequest.of(0, 10, Sort.by("ASC")))).thenReturn(pagedUsers);
-
-        Map filters = new HashMap<>();
-        filters.put("notUsers", "1");
-
-        PaginateResponse userAll = this.userService.get(0, 10, "ASC", "", 0,
-                filters);
-
-        Assert.assertEquals(1, userAll.getItems().size());
-    }
 
     @Test
     public void saveUser(){

@@ -1,22 +1,26 @@
 package br.com.starterpack.core.service;
 
 import br.com.starterpack.core.entity.AbstractEntity;
-import br.com.starterpack.core.repository.IRepository;
+import br.com.starterpack.core.repository.BaseRepository;
 import br.com.starterpack.core.response.PaginateResponse;
+import br.com.starterpack.core.util.DinamicFilterUtil;
+import br.com.starterpack.exception.BusinessException;
 import br.com.starterpack.exception.ModelNotFoundException;
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.dsl.*;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.CriteriaDefinition;
+import org.springframework.data.mongodb.core.query.Query;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public abstract class AbstractCrudService<T extends AbstractEntity, S> implements ICrudService<T, S> {
 
-    public abstract IRepository<T, S> getRepository();
+    public abstract BaseRepository<T, S> getRepository();
     public abstract T mergeToUpdate(T objectUpdated, T object);
 
     @Override
@@ -48,34 +52,35 @@ public abstract class AbstractCrudService<T extends AbstractEntity, S> implement
             pageRequest = PageRequest.of(0, limit);
         }
 
-        PathBuilder<T> pathBuilder = new PathBuilder(AbstractEntity.class, "");
-        BooleanBuilder predicate = new BooleanBuilder();
+        Query query = new Query().with(pageRequest);
+        List<Criteria> criterias = new ArrayList();
 
-        this.applyFilters(filters, predicate);
+        this.applyFilters(filters, criterias);
 
-        filters.forEach((key, value) -> {
-            if(value.equals("true") || value.equals("false")){
-                BooleanPath booleanPath = pathBuilder.getBoolean(key);
-                BooleanExpression booleanExpression = booleanPath.eq(Boolean.valueOf(value));
-                predicate.and(booleanExpression);
-            }else if(StringUtils.isNumeric(value)){
-                NumberPath numberPath = pathBuilder.getNumber(key, Integer.class);
-                BooleanExpression booleanExpression = numberPath.eq(Integer.valueOf(value));
-                predicate.and(booleanExpression);
-            }else{
-                StringPath stringPath = pathBuilder.getString(key);
-                BooleanExpression booleanExpression = stringPath.eq(value);
-                predicate.and(booleanExpression);
-            }
+        filters.entrySet().stream()
+            .forEach((entry) -> {
+                String value = entry.getValue();
+                String[] dsl = entry.getKey().split("\\|");
+                String attributePath = dsl[0];
+                String operator = (dsl.length >= 2) ? dsl[1] : "eq";
+                String attributeType =  (dsl.length == 3) ? dsl[2] : "string";
+
+                try {
+                    CriteriaDefinition criteria = DinamicFilterUtil.getDefinedCriteria(operator, attributeType, attributePath, value);
+                    query.addCriteria(criteria);
+
+                } catch(NumberFormatException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                    throw new BusinessException("DYNAMIC_FILTER_CONVERT", e);
+                };
         });
 
-        Page all = this.getRepository().findAll(predicate, pageRequest);
+        criterias.forEach(criteria -> query.addCriteria(criteria));
 
-        this.afterGetAll(all.getContent());
+        Page<T> pageResponse = this.getRepository().findAll(query, pageRequest);
 
-        return PaginateResponse.builder()
-                .items(all.getContent())
-                .total(all.getTotalElements()).build();
+        this.afterGetAll(pageResponse.getContent());
+
+        return PaginateResponse.builder().items(pageResponse.getContent()).total(pageResponse.getTotalElements()).build();
     }
 
     public void beforeGetAll(Map<String, String> filters, int page,
@@ -83,7 +88,7 @@ public abstract class AbstractCrudService<T extends AbstractEntity, S> implement
                              String orderBy, Integer limit){
     }
 
-    public void applyFilters(Map<String, String> filters, BooleanBuilder predicate){
+    public void applyFilters(Map<String, String> filters, List<Criteria> criterias){
     }
 
     public void afterGetAll(List<T> all){

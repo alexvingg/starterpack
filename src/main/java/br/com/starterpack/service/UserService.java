@@ -1,12 +1,10 @@
 package br.com.starterpack.service;
 
-import br.com.starterpack.core.repository.IRepository;
+import br.com.starterpack.core.repository.BaseRepository;
 import br.com.starterpack.core.service.AbstractCrudService;
-import br.com.starterpack.entity.QUser;
 import br.com.starterpack.entity.User;
 import br.com.starterpack.exception.BusinessException;
 import br.com.starterpack.repository.UserRepository;
-import com.querydsl.core.BooleanBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -20,7 +18,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,17 +30,8 @@ public class UserService extends AbstractCrudService<User, String> implements Us
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Override
-    public IRepository getRepository() {
+    public BaseRepository getRepository() {
         return userRepository;
-    }
-
-    @Override
-    public void applyFilters(Map<String, String> filters, BooleanBuilder predicate) {
-        if(filters.containsKey("notUsers")){
-            String[] ids = filters.get("notUsers").split(",");
-            predicate.and(QUser.user.id.notIn(ids));
-            filters.remove("notUsers");
-        }
     }
 
     @Override
