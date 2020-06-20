@@ -9,7 +9,6 @@ import br.com.starterpack.exception.ModelNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 import org.springframework.data.mongodb.core.query.Query;
 
@@ -53,9 +52,8 @@ public abstract class AbstractCrudService<T extends AbstractEntity, S> implement
         }
 
         Query query = new Query().with(pageRequest);
-        List<Criteria> criterias = new ArrayList();
 
-        this.applyFilters(filters, criterias);
+        List<CriteriaDefinition> criterias = this.applyFilters(filters);
 
         filters.entrySet().stream()
             .forEach((entry) -> {
@@ -88,7 +86,8 @@ public abstract class AbstractCrudService<T extends AbstractEntity, S> implement
                              String orderBy, Integer limit){
     }
 
-    public void applyFilters(Map<String, String> filters, List<Criteria> criterias){
+    public List<CriteriaDefinition> applyFilters(Map<String, String> filters){
+        return new ArrayList<>();
     }
 
     public void afterGetAll(List<T> all){

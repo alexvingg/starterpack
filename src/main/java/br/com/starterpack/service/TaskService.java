@@ -7,10 +7,11 @@ import br.com.starterpack.exception.ModelNotFoundException;
 import br.com.starterpack.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -26,7 +27,8 @@ public class TaskService extends AbstractCrudService<Task, String> {
     }
 
     @Override
-    public void applyFilters(Map<String, String> filters, List<Criteria> criterias) {
+    public List<CriteriaDefinition> applyFilters(Map<String, String> filters) {
+        List<CriteriaDefinition> criterias = new ArrayList<>();
         if(filters.containsKey("dateStart") ){
             LocalDate start = LocalDate.parse(filters.get("dateStart"));
             criterias.add(new Criteria("scheduledTo").gte(start));
@@ -38,6 +40,7 @@ public class TaskService extends AbstractCrudService<Task, String> {
             criterias.add(new Criteria("scheduledTo").lte(end));
             filters.remove("dateEnd");
         }
+        return criterias;
     }
 
     @Override
